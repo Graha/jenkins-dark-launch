@@ -39,7 +39,7 @@ pipeline {
                         parameters: [
                             choice(
                                 name: 'Deployment Methods',
-                                choices:"Clean\nBlue/Green\nA/B Testing\nCanary",
+                                choices:"Clean\nBlue/Green\nA/B-Testing\nCanary",
                                 description: "Deployment Methods...")
                     ])
                 }
