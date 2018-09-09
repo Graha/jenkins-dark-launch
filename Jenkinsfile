@@ -1,5 +1,5 @@
 pipeline {
-    agent  { label 'master' } 
+    agent  { label 'ubuntu-slave' } 
     environment {
         Deployment_Versions = "2.0\n1.0"
         //gettags = ("git ls-remote -t -h git@github.com:RLIndia/cc.git | grep refs/tags | cut -f 3 -d '/'").execute()
