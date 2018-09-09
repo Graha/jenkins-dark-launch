@@ -65,7 +65,7 @@ pipeline {
                     // }
                     steps {
                         echo "Releasing on Application Cluster"
-                        //sh "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        sh "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                     }
                     post {
                         always {
