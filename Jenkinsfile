@@ -92,19 +92,21 @@ pipeline {
         stage ('Cleanup') {
             steps {
                 echo "Cleanup in progress..."
-                if (env.Deployment_Method != 'Clean') {
-                    script {
-                        env.Cleanup = input (id: 'cleanup', message: 'Select Cleanup Methods', ok: 'cleanup',
-                            parameters: [
-                                choice(
-                                    name: 'Cleanup Version',
-                                    choices:"Previous\nNew",
-                                    description: "Cleanup Version...")
-                        ])
+                script{
+                    if (env.Deployment_Method != 'Clean') {
+                        script {
+                            env.Cleanup = input (id: 'cleanup', message: 'Select Cleanup Methods', ok: 'cleanup',
+                                parameters: [
+                                    choice(
+                                        name: 'Cleanup Version',
+                                        choices:"Previous\nNew",
+                                        description: "Cleanup Version...")
+                            ])
+                        }
+                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                    } else {
+                        echo "Cleanup process skipped..."
                     }
-                    sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
-                } else {
-                    echo "Cleanup process skipped..."
                 }
             }
         }        
