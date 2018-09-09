@@ -12,7 +12,7 @@ pipeline {
                         [$class: 'TextParameterDefinition', defaultValue: 'cc', description: 'Stack Name', name: 'name']
                     ])
                 }
-                echo "Deployment Stack ${env.Deployment_Name}"
+                echo "Deployment Stack Name :: ${env.Deployment_Name}"
             }
         }
         stage ('Pick the Version') {
@@ -25,7 +25,7 @@ pipeline {
                                 description: "Deployment Version...")
                     ])
                 }
-                echo "Releasing package  v${env.Deployment_Version}"
+                echo "Releasing package Version :: ${env.Deployment_Version}"
             }
         }
         stage ('Deployment Method') {
@@ -48,7 +48,7 @@ pipeline {
         }
         stage ('Prepare Release') {
             steps {
-                sh "bash prepare.sh ${env.Deployment_Version} ${env.Deployment_Method}"
+                sh "bash prepare.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                 echo "Preparing Release Procedure..."
             }
         }
@@ -59,31 +59,17 @@ pipeline {
         // }
         stage ('Release') {
             parallel {
-                stage('Releasing On FrontEnd Cluster') {
+                stage('Releasing On Application Cluster') {
                     // agent {
                     //     label "frontend"
                     // }
                     steps {
-                        echo "Releasing on frontend Cluster"
+                        echo "Releasing on Application Cluster"
+                        //sh "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                     }
                     post {
                         always {
-                            //junit "**/TEST-*.xml"
-                            echo "Verified FrontEnd release"
-                        }
-                    }
-                }
-                stage('Releasing On Backend Cluster') {
-                    // agent {
-                    //     label "backend"
-                    // }
-                    steps {
-                         echo "Releasing on backend Cluster"
-                    }
-                    post {
-                        always {
-                            //junit "**/TEST-*.xml"
-                            echo "Verified Backend release"
+                            echo "Verified Application release"
                         }
                     }
                 }
@@ -96,7 +82,6 @@ pipeline {
                     }
                     post {
                         always {
-                            //junit "**/TEST-*.xml"
                             echo "Verified Data Migration"
                         }
                     }
@@ -107,6 +92,20 @@ pipeline {
         stage ('Cleanup') {
             steps {
                 echo "Cleanup in progress..."
+                if (${env.Deployment_Method} != 'Clean') {
+                    script {
+                        env.Cleanup = input (id: 'cleanup', message: 'Select Cleanup Methods', ok: 'cleanup',
+                            parameters: [
+                                choice(
+                                    name: 'Cleanup Version',
+                                    choices:"Previous\nNew",
+                                    description: "Cleanup Version...")
+                        ])
+                    }
+                    sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                } else {
+                    echo "Cleanup process skipped..."
+                }
             }
         }        
     }

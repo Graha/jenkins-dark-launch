@@ -8,7 +8,7 @@ CLEAN=$1
 STACK=$2
 
 
-if [ $CLEAN == 'deployed' ]
+if [ $CLEAN == 'Previous' ]
 then
     echo "Removing ${STACK}_app-${DEPLOYED}"
     docker service rm ${STACK}_app-${DEPLOYED} 
