@@ -92,7 +92,7 @@ pipeline {
         stage ('Cleanup') {
             steps {
                 echo "Cleanup in progress..."
-                if (${env.Deployment_Method} != 'Clean') {
+                if (env.Deployment_Method != 'Clean') {
                     script {
                         env.Cleanup = input (id: 'cleanup', message: 'Select Cleanup Methods', ok: 'cleanup',
                             parameters: [
