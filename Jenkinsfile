@@ -1,13 +1,18 @@
 pipeline {
     agent  { label 'master' } 
     environment {
-        Deployment_Versions = "v1.0\nv1.1\nv1.1\nv1.1.24\nv1.2\nv1.6.0\nv1.7.0\nv1.7.1\nv1.8.0"
+        Deployment_Versions = "2.0\n1.0"
         //gettags = ("git ls-remote -t -h git@github.com:RLIndia/cc.git | grep refs/tags | cut -f 3 -d '/'").execute()
     }
     stages {
         stage ('Initialize') {
             steps {
-                echo "Initializing... "
+                script {
+                    env.Deployment_Name = input(id: 'name', message: 'Select Deployment Stack Name', parameters: [
+                        [$class: 'TextParameterDefinition', defaultValue: 'cc', description: 'Stack Name', name: 'name']
+                    ])
+                }
+                echo "Deployment Stack ${env.Deployment_Name}"
             }
         }
         stage ('Pick the Version') {
@@ -23,16 +28,6 @@ pipeline {
                 echo "Releasing package  v${env.Deployment_Version}"
             }
         }
-        // stage ('Pick the Version') {
-        //     steps {
-        //         script {
-        //             env.Deployment_Version = input(id: 'version', message: 'Select Deployment Version', parameters: [
-        //                 [$class: 'TextParameterDefinition', defaultValue: '1.0', description: 'Version', name: 'version']
-        //             ])
-        //         }
-        //         echo "Releasing package  v${env.Deployment_Version}"
-        //     }
-        // }
         stage ('Deployment Method') {
             // Blue/Green Deployment
             // A/B Testing
@@ -97,7 +92,7 @@ pipeline {
                     //     label "database"
                     // }
                     steps {
-                         echo "Doing Data Migration..."
+                         echo "No Data Migration available to do..."
                     }
                     post {
                         always {
@@ -115,4 +110,30 @@ pipeline {
             }
         }        
     }
+}
+
+
+def docker_pull(version) {
+    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+        //def img = docker.image("relevancelab/cc:${version}")
+        //img.pull()
+        sh "docker pull graha/go-web:${version}"
+    }
+}
+
+
+def notify(status, version, environment) {
+    def host = sh(script: 'hostname', returnStdout: true).trim()
+    def os = sh(script: 'uname', returnStdout: true).trim()
+
+  //slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+  emailext (
+      subject: "Deployment of 'CC:v${version} on ${host}-${os} (${environment}) , ${status}'",
+      body: """<p>Deployment of 'CC:v${version} on ${host}-${os} (${environment}), ${status}'</p>
+        <p>Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>"</p>""",
+      mimeType: 'text/html',
+      //to: "rlc.support@relevancelab.com"
+      to: "giragadurai.vallirajan@relevancelab.com"
+      //recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    )
 }
