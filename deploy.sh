@@ -15,7 +15,7 @@ then
     docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${NORMALIZED_VERSION} --env-add ALTER_APP_PARAM=backup ${STACK}_app-lb
     echo ${VERSION} > dark.version
     cat docker-delta.yml.e
-elif [ $METHOD == 'A/B Testing' ] && [ -e deployed.version ]
+elif [ $METHOD == 'A/B-Testing' ] && [ -e deployed.version ]
 then
     echo "Deploying ABTesting"
     sed "s/\\\${nversion}/${NORMALIZED_VERSION}/g;s/\\\${version}/${VERSION}/g" docker-delta.yml.t > docker-delta.yml.e
