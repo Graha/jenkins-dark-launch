@@ -11,7 +11,7 @@ services:
     - ACTIV_APP_PARAM=
     - ALTER_APP_PARAM=    
     ports:
-    - 90:80
+    - 80:80
     deploy:
       replicas: 2
       update_config:
