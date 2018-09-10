@@ -12,13 +12,13 @@ if [ $CLEAN == 'Previous' ]
 then
     echo "Removing ${STACK}_app-${DEPLOYED}"
     docker service rm ${STACK}_app-${DEPLOYED} 
-    docker rmi `docker service inspect ${STACK}_app-${DEPLOYED}| grep com.docker.stack.image | cut -f 4 -d "\""`
+    echo docker rmi `docker service inspect ${STACK}_app-${DEPLOYED}| grep com.docker.stack.image | cut -f 4 -d "\""`
     docker service update --env-add ACTIV_APP_ENDPOINT=app-${DARK} --env-add ALTER_APP_ENDPOINT=app-${DARK} ${STACK}_app-lb
     cp ~/.deploy/dark.version ~/.deploy/deployed.version
 else
     echo "Removing ${STACK}_app-${DARK}"
     docker service rm ${STACK}_app-${DARK} 
-    docker rmi `docker service inspect ${STACK}_app-${DARK}| grep com.docker.stack.image | cut -f 4 -d "\""`
+    echo docker rmi `docker service inspect ${STACK}_app-${DARK}| grep com.docker.stack.image | cut -f 4 -d "\""`
     docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${DEPLOYED} ${STACK}_app-lb
 fi
 
