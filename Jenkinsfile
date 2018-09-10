@@ -48,8 +48,9 @@ pipeline {
         }
         stage ('Prepare Release') {
             steps {
-                sh "bash prepare.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                 echo "Preparing Release Procedure..."
+                docker_pull(env.Deployment_Version)
+                sleep 5
             }
         }
         // stage ('Prepare Chef') {
