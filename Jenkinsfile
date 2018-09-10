@@ -74,6 +74,19 @@ pipeline {
                         }
                     }
                 }
+                stage('Updating Configuration') {
+                    // agent {
+                    //     label "database"
+                    // }
+                    steps {
+                         echo "No configuration updates available to do..."
+                    }
+                    post {
+                        always {
+                            echo "Verified Data Migration"
+                        }
+                    }
+                }
                 stage('Migrating Data Store') {
                     // agent {
                     //     label "database"
