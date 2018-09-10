@@ -1,5 +1,5 @@
 pipeline {
-    agent  { label 'ubuntu-slave' } 
+    agent  { label 'ubuntu-ccdemo' } 
     environment {
         Deployment_Versions = "1.7.1-5_b457\n1.7.0-1_b361\n1.6.0-3_b272"
         //gettags = ("git ls-remote -t -h git@github.com:RLIndia/cc.git | grep refs/tags | cut -f 3 -d '/'").execute()
