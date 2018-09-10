@@ -109,6 +109,7 @@ pipeline {
                         echo "Cleanup process skipped..."
                     }
                 }
+                notify("Done", env.Deployment_Version, "Demo")
             }
         }        
     }
