@@ -14,7 +14,7 @@ then
     sed "s/\\\${nversion}/${NORMALIZED_VERSION}/g;s/\\\${version}/${VERSION}/g" docker-delta.yml.t > docker-delta.yml.e
     DEPLOYED=`cat ~/.deploy/deployed.version | tr '.' '-'`
     docker stack deploy -c docker-delta.yml.e ${STACK} 
-    docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${NORMALIZED_VERSION} --env-add ALTER_APP_PARAM=backup ${STACK}_app-lb
+    docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${NORMALIZED_VERSION} --env-add ACTIV_APP_PARAM=backup ${STACK}_app-lb
     echo ${VERSION} >  ~/.deploy/dark.version
     cat docker-delta.yml.e
 elif [ $METHOD == 'A/B-Testing' ] && [ -e ~/.deploy/deployed.version ]
