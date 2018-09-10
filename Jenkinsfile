@@ -83,7 +83,7 @@ pipeline {
                     }
                     post {
                         always {
-                            echo "Verified Data Migration"
+                            echo "Verified Configuration Updates (if any)"
                         }
                     }
                 }
@@ -96,7 +96,7 @@ pipeline {
                     }
                     post {
                         always {
-                            echo "Verified Data Migration"
+                            echo "Verified Data Migration (if any)"
                         }
                     }
                 }
