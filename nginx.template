@@ -6,6 +6,6 @@ server {
    }
 }
 upstream app-stream {
-   server ${ACTIV_APP_ENDPOINT}:8080 ${ACTIV_APP_PARAM};
-   server ${ALTER_APP_ENDPOINT}:8080 ${ALTER_APP_PARAM};
+   server ${ACTIV_APP_ENDPOINT}:3002 ${ACTIV_APP_PARAM};
+   server ${ALTER_APP_ENDPOINT}:3002 ${ALTER_APP_PARAM};
 }

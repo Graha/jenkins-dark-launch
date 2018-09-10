@@ -1,7 +1,7 @@
 pipeline {
     agent  { label 'ubuntu-slave' } 
     environment {
-        Deployment_Versions = "2.0\n1.0"
+        Deployment_Versions = "1.7.1-5_b457\n1.7.0-1_b361\n1.6.0-3_b272"
         //gettags = ("git ls-remote -t -h git@github.com:RLIndia/cc.git | grep refs/tags | cut -f 3 -d '/'").execute()
     }
     stages {
@@ -133,7 +133,7 @@ def docker_pull(version) {
     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
         //def img = docker.image("relevancelab/cc:${version}")
         //img.pull()
-        sh "docker pull graha/go-web:${version}"
+        sh "docker pull relevancelab/cc:${version}"
     }
 }
 

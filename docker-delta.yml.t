@@ -7,4 +7,12 @@
 version: '3'
 services:
   app-${nversion}:
-    image: graha/go-web:${version}
+    image: relevancelab/cc:${version}
+    environment:
+      - DB_HOST=172.17.2.4
+      - REDIS_HOST=172.17.2.4
+      - SCHEDULER_HOST=scheduler
+      - APP_ENV=QA
+    volumes:
+      - /opt/cc/config:/rlc/cc/server/app/config
+      - /opt/cc/logs:/rlc/cc/server/app/logs

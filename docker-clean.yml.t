@@ -18,7 +18,12 @@ services:
         parallelism: 1
         delay: 0s
   app-${nversion}:
-    image: graha/go-web:${version}
-    # deploy:
-    #   placement:
-    #     constraints: [node.labels.environment == green]
+    image: relevancelab/cc:${version}
+    environment:
+      - DB_HOST=172.17.2.4
+      - REDIS_HOST=172.17.2.4
+      - SCHEDULER_HOST=scheduler
+      - APP_ENV=QA
+    volumes:
+      - /opt/cc/config:/rlc/cc/server/app/config
+      - /opt/cc/logs:/rlc/cc/server/app/logs
