@@ -2,13 +2,19 @@ pipeline {
     agent  any 
     stages {
         stage ('Initialize') {
-            echo "Chosen Stack Name :: ${env.Deployment_Name}"
+            steps {
+                echo "Chosen Stack Name :: ${env.Deployment_Name}"
+            }
         }
         stage ('Release Version') {
-            echo "Chosen package Version :: ${env.Deployment_Version}"
+            steps {
+                echo "Chosen package Version :: ${env.Deployment_Version}"
+            }
         }
         stage ('Deployment Method') {
+            steps {
                 echo "Releasing on ${env.Deployment_Method} mode."
+            }
         }
         stage ('Prepare Release') {
             steps {
