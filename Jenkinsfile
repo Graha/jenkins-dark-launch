@@ -95,12 +95,12 @@ pipeline {
                         echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                     }else if (env.Deployment_Method == 'Canary') {
                         script {
-                            env.Cleanup = input (id: 'cleanup', message: 'Release more or Rollback?', ok: 'Do',
+                            env.Cleanup = input (id: 'cleanup', message: 'Addup or Rollback Canary?', ok: 'Do',
                                 parameters: [
                                     choice(
-                                        name: 'Release more or Rollback Version',
-                                        choices:"Rollback\nRelease More",
-                                        description: "Release more or Rollback the Version...")
+                                        name: 'Addup or Rollback Canary',
+                                        choices:"Rollback\nAddup",
+                                        description: "Addup or Rollback the Canary...")
                             ])
                         }
                         //TBR
