@@ -8,7 +8,7 @@ CLEAN=$1
 STACK=$2
 
 
-if [ $CLEAN == 'Previous' ]
+if [ $CLEAN == 'Release' ]
 then
     echo "Removing ${STACK}_app-${DEPLOYED}"
     TD=`docker service inspect ${STACK}_app-${DEPLOYED}| grep com.docker.stack.image | cut -f 4 -d "\""`
