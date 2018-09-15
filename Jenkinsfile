@@ -79,14 +79,14 @@ pipeline {
             steps {
                 echo "Cleanup in progress..."
                 script{
-                    if (env.Deployment_Method != 'Clean') {
+                    if (env.Deployment_Method != 'Blue/Green') {
                         script {
-                            env.Cleanup = input (id: 'cleanup', message: 'Select Cleanup Methods', ok: 'cleanup',
+                            env.Cleanup = input (id: 'cleanup', message: 'Release or Rollback?', ok: 'Do',
                                 parameters: [
                                     choice(
-                                        name: 'Cleanup Version',
-                                        choices:"Previous\nNew",
-                                        description: "Cleanup Version...")
+                                        name: 'Release or Rollback Version',
+                                        choices:"Rollback\nRelease",
+                                        description: "Release or Rollback the Version...")
                             ])
                         }
                         //TBR
