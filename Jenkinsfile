@@ -79,6 +79,7 @@ pipeline {
             steps {
                 echo "Cleanup in progress..."
                 script{
+                    //Clean\nBlue/Green\nA/B-Testing\nCanary
                     if (env.Deployment_Method == 'Blue/Green') {
                         script {
                             env.Cleanup = input (id: 'cleanup', message: 'Release or Rollback?', ok: 'Do',
@@ -92,6 +93,32 @@ pipeline {
                         //TBR
                         //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                         echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                    }else if (env.Deployment_Method == 'Canary') {
+                        script {
+                            env.Cleanup = input (id: 'cleanup', message: 'Release more or Rollback?', ok: 'Do',
+                                parameters: [
+                                    choice(
+                                        name: 'Release more or Rollback Version',
+                                        choices:"Rollback\nRelease More",
+                                        description: "Release more or Rollback the Version...")
+                            ])
+                        }
+                        //TBR
+                        //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                    } else if (env.Deployment_Method == 'A/B-Testing') { 
+                        script {
+                            env.Cleanup = input (id: 'cleanup', message: 'A or B?', ok: 'Do',
+                                parameters: [
+                                    choice(
+                                        name: 'A or B Version',
+                                        choices:"A\nB",
+                                        description: "A or B the Version...")
+                            ])
+                        }
+                        //TBR
+                        //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"                    
                     } else {
                         echo "Cleanup process skipped..."
                     }
