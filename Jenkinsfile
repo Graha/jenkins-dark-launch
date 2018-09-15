@@ -79,7 +79,7 @@ pipeline {
             steps {
                 echo "Cleanup in progress..."
                 script{
-                    if (env.Deployment_Method != 'Blue/Green') {
+                    if (env.Deployment_Method == 'Blue/Green') {
                         script {
                             env.Cleanup = input (id: 'cleanup', message: 'Release or Rollback?', ok: 'Do',
                                 parameters: [
@@ -91,6 +91,7 @@ pipeline {
                         }
                         //TBR
                         //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                     } else {
                         echo "Cleanup process skipped..."
                     }
