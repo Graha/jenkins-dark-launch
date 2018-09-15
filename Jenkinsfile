@@ -108,12 +108,12 @@ pipeline {
                         echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                     } else if (env.Deployment_Method == 'A/B-Testing') { 
                         script {
-                            env.Cleanup = input (id: 'cleanup', message: 'A or B?', ok: 'Do',
+                            env.Cleanup = input (id: 'cleanup', message: 'Cleanup A or B?', ok: 'Do',
                                 parameters: [
                                     choice(
-                                        name: 'A or B Version',
+                                        name: 'Cleanup A or B Version',
                                         choices:"A\nB",
-                                        description: "A or B the Version...")
+                                        description: "Cleanup A or B Version...")
                             ])
                         }
                         //TBR
