@@ -1,55 +1,20 @@
 pipeline {
-    agent  { label 'ubuntu-ccdemo' } 
-    environment {
-        Deployment_Versions = "1.7.1-5_b457\n1.7.0-1_b361\n1.6.0-3_b272"
-        //gettags = ("git ls-remote -t -h git@github.com:RLIndia/cc.git | grep refs/tags | cut -f 3 -d '/'").execute()
-    }
+    agent  any 
     stages {
         stage ('Initialize') {
-            steps {
-                script {
-                    env.Deployment_Name = input(id: 'name', message: 'Select Deployment Stack Name', parameters: [
-                        [$class: 'TextParameterDefinition', defaultValue: 'cc', description: 'Stack Name', name: 'name']
-                    ])
-                }
-                echo "Deployment Stack Name :: ${env.Deployment_Name}"
-            }
+            echo "Chosen Stack Name :: ${env.Deployment_Name}"
         }
-        stage ('Pick the Version') {
-            steps {
-                script {
-                    env.Deployment_Version = input(id: 'version', message: 'Select Deployment Version', parameters: [
-                            choice(
-                                name: 'Deployment Version',
-                                choices: env.Deployment_Versions,
-                                description: "Deployment Version...")
-                    ])
-                }
-                echo "Releasing package Version :: ${env.Deployment_Version}"
-            }
+        stage ('Release Version') {
+            echo "Chosen package Version :: ${env.Deployment_Version}"
         }
         stage ('Deployment Method') {
-            // Blue/Green Deployment
-            // A/B Testing
-            // Canary 
-            // Clean or Fresh Deployment
-            steps {
-                script {
-                    env.Deployment_Method = input (id: 'method', message: 'Select Deployment Methods', ok: 'Deploy',
-                        parameters: [
-                            choice(
-                                name: 'Deployment Methods',
-                                choices:"Clean\nBlue/Green\nA/B-Testing\nCanary",
-                                description: "Deployment Methods...")
-                    ])
-                }
                 echo "Releasing on ${env.Deployment_Method} mode."
-            }
         }
         stage ('Prepare Release') {
             steps {
                 echo "Preparing Release Procedure..."
-                docker_pull(env.Deployment_Version)
+                //TBR
+                //docker_pull(env.Deployment_Version)
                 sleep 5
             }
         }
@@ -66,7 +31,8 @@ pipeline {
                     // }
                     steps {
                         echo "Releasing on Application Cluster"
-                        sh "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        //TBR
+                        //sh "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                     }
                     post {
                         always {
@@ -117,7 +83,8 @@ pipeline {
                                         description: "Cleanup Version...")
                             ])
                         }
-                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        //TBR
+                        //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                     } else {
                         echo "Cleanup process skipped..."
                     }
