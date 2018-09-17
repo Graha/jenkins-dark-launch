@@ -1,5 +1,5 @@
 pipeline {
-    agent  any 
+    agent  { label 'ubuntu-ccdemo' }  
     stages {
         stage ('Initialize') {
             steps {
@@ -39,6 +39,7 @@ pipeline {
                         echo "Releasing on Application Cluster"
                         //TBR
                         //sh "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        echo "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                     }
                     post {
                         always {
