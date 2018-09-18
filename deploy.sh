@@ -20,6 +20,7 @@ then
     sed "s/\\\${nversion}/${NORMALIZED_VERSION}/g;s/\\\${version}/${VERSION}/g" ./${APP}/docker-delta.yml.t > docker-delta.yml.e
     DEPLOYED=`cat ~/.deploy/deployed.version | tr '.' '-'`
     docker stack deploy -c docker-delta.yml.e ${STACK} 
+    echo docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${NORMALIZED_VERSION} --env-add ACTIV_APP_PARAM=backup ${STACK}_app-lb
     docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${NORMALIZED_VERSION} --env-add ACTIV_APP_PARAM=backup ${STACK}_app-lb
     echo ${VERSION} >  ~/.deploy/dark.version
     cat docker-delta.yml.e
@@ -29,6 +30,7 @@ then
     sed "s/\\\${nversion}/${NORMALIZED_VERSION}/g;s/\\\${version}/${VERSION}/g" ./${APP}/docker-delta.yml.t > docker-delta.yml.e
     DEPLOYED=`cat ~/.deploy/deployed.version | tr '.' '-'`
     docker stack deploy -c docker-delta.yml.e ${STACK} 
+    echo docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${NORMALIZED_VERSION} ${STACK}_app-lb
     docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${NORMALIZED_VERSION} ${STACK}_app-lb
     echo ${VERSION} > ~/.deploy/dark.version
     cat docker-delta.yml.e
@@ -38,6 +40,7 @@ then
     sed "s/\\\${nversion}/${NORMALIZED_VERSION}/g;s/\\\${version}/${VERSION}/g" ./${APP}/docker-delta.yml.t > docker-delta.yml.e
     DEPLOYED=`cat ~/.deploy/deployed.version | tr '.' '-'`
     docker stack deploy -c docker-delta.yml.e ${STACK} 
+    echo docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${NORMALIZED_VERSION} --env-add ACTIV_APP_PARAM=weight=4 --env-add ALTER_APP_PARAM=weight=1 ${STACK}_app-lb
     docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${NORMALIZED_VERSION} --env-add ACTIV_APP_PARAM=weight=4 --env-add ALTER_APP_PARAM=weight=1 ${STACK}_app-lb
     echo ${VERSION} > ~/.deploy/dark.version
     cat docker-delta.yml.e
