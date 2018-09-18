@@ -136,7 +136,8 @@ def docker_pull(version) {
     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
         //def img = docker.image("relevancelab/cc:${version}")
         //img.pull()
-        sh "docker pull relevancelab/cc:${version}"
+        def image = readFile "${env.WORKSPACE}/${env.Application}/docker.image"
+        sh "docker pull ${image}:${version}"
     }
 }
 
