@@ -3,6 +3,7 @@ pipeline {
     stages {
         stage ('Initialize') {
             steps {
+                echo "Deploying application :: ${env.Application}"
                 echo "Chosen Stack Name :: ${env.Deployment_Name}"
             }
         }
@@ -38,8 +39,8 @@ pipeline {
                     steps {
                         echo "Releasing on Application Cluster"
                         //TBR
-                        //sh "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
-                        echo "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        //sh "bash deploy.sh ${env.Application} ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        echo "bash deploy.sh ${env.Application} ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                     }
                     post {
                         always {
