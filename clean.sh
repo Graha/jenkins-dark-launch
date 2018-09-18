@@ -9,6 +9,7 @@ STACK=$2
 
 
 if [ $CLEAN == 'Rollback' ] || [ $CLEAN == 'B' ] 
+then
     echo "Removing ${STACK}_app-${DARK}"
     TD=`docker service inspect ${STACK}_app-${DARK}| grep com.docker.stack.image | cut -f 4 -d "\""`
     docker service rm ${STACK}_app-${DARK} 
