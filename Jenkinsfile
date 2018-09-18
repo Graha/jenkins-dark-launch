@@ -21,7 +21,7 @@ pipeline {
             steps {
                 echo "Preparing Release Procedure..."
                 //TBR
-                //docker_pull(env.Deployment_Version)
+                docker_pull(env.Deployment_Version)
                 sleep 5
             }
         }
@@ -39,8 +39,8 @@ pipeline {
                     steps {
                         echo "Releasing on Application Cluster"
                         //TBR
-                        //sh "bash deploy.sh ${env.Application} ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
-                        echo "bash deploy.sh ${env.Application} ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        sh "bash deploy.sh ${env.Application} ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        //echo "bash deploy.sh ${env.Application} ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                     }
                     post {
                         always {
@@ -93,8 +93,8 @@ pipeline {
                             ])
                         }
                         //TBR
-                        //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
-                        echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        //echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                     }else if (env.Deployment_Method == 'Canary') {
                         script {
                             env.Cleanup = input (id: 'cleanup', message: 'Addup or Rollback Canary?', ok: 'Do',
@@ -106,8 +106,8 @@ pipeline {
                             ])
                         }
                         //TBR
-                        //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
-                        echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        //echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                     } else if (env.Deployment_Method == 'A/B-Testing') { 
                         script {
                             env.Cleanup = input (id: 'cleanup', message: 'Cleanup A or B?', ok: 'Do',
@@ -119,8 +119,8 @@ pipeline {
                             ])
                         }
                         //TBR
-                        //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
-                        echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"                    
+                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        //echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"                    
                     } else {
                         echo "Cleanup process skipped..."
                     }
