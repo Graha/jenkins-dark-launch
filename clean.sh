@@ -7,6 +7,10 @@ DARK=`cat ~/.deploy/dark.version | tr '.' '-'`
 CLEAN=$1
 STACK=$2
 
+echo "Finalizing Configuration... However nothing found for this build."
+echo "Finalizing Database... However nothing found for this build."
+echo "Finalizing Application Cluster... Found"
+
 
 if [ $CLEAN == 'Rollback' ] || [ $CLEAN == 'B' ] 
 then
@@ -15,6 +19,7 @@ then
     docker service rm ${STACK}_app-${DARK} 
     sleep 5
     docker rmi -f ${TD}
+    echo "docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${DEPLOYED} ${STACK}_app-lb"
     docker service update --env-add ACTIV_APP_ENDPOINT=app-${DEPLOYED} --env-add ALTER_APP_ENDPOINT=app-${DEPLOYED} ${STACK}_app-lb
 else
     echo "Removing ${STACK}_app-${DEPLOYED}"
@@ -22,6 +27,7 @@ else
     docker service rm ${STACK}_app-${DEPLOYED} 
     sleep 5
     docker rmi -f ${TD}
+    echo "docker service update --env-add ACTIV_APP_ENDPOINT=app-${DARK} --env-add ALTER_APP_ENDPOINT=app-${DARK} ${STACK}_app-lb"
     docker service update --env-add ACTIV_APP_ENDPOINT=app-${DARK} --env-add ALTER_APP_ENDPOINT=app-${DARK} ${STACK}_app-lb
     cp ~/.deploy/dark.version ~/.deploy/deployed.version
 fi
