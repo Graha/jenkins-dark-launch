@@ -93,7 +93,7 @@ pipeline {
                             ])
                         }
                         //TBR
-                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        sh "bash clean.sh ${env.Application} ${env.Cleanup} ${env.Deployment_Name}"
                         //echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                     }else if (env.Deployment_Method == 'Canary') {
                         script {
@@ -106,7 +106,7 @@ pipeline {
                             ])
                         }
                         //TBR
-                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        sh "bash clean.sh ${env.Application} ${env.Cleanup} ${env.Deployment_Name}"
                         //echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                     } else if (env.Deployment_Method == 'A/B-Testing') { 
                         script {
@@ -119,7 +119,7 @@ pipeline {
                             ])
                         }
                         //TBR
-                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        sh "bash clean.sh ${env.Application} ${env.Cleanup} ${env.Deployment_Name}"
                         //echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"                    
                     } else {
                         echo "Cleanup process skipped..."

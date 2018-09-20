@@ -2,10 +2,13 @@
 #clean.sh deployed try01
 #clean.sh dark try01
 
-DEPLOYED=`cat ~/.deploy/deployed.version | tr '.' '-'`
-DARK=`cat ~/.deploy/dark.version | tr '.' '-'`
-CLEAN=$1
-STACK=$2
+DEPLOY_DIR=./.deploy
+APP=$1
+DEPLOYED=`cat ${DEPLOY_DIR}/deployed.version | tr '.' '-'`
+DARK=`cat ${DEPLOY_DIR}/dark.version | tr '.' '-'`
+CLEAN=$2
+STACK=$3
+
 
 echo "Finalizing Configuration... However nothing found for this build."
 echo "Finalizing Database... However nothing found for this build."
@@ -29,7 +32,7 @@ else
     docker rmi -f ${TD}
     echo "docker service update --env-add ACTIV_APP_ENDPOINT=app-${DARK} --env-add ALTER_APP_ENDPOINT=app-${DARK} ${STACK}_app-lb"
     docker service update --env-add ACTIV_APP_ENDPOINT=app-${DARK} --env-add ALTER_APP_ENDPOINT=app-${DARK} ${STACK}_app-lb
-    cp ~/.deploy/dark.version ~/.deploy/deployed.version
+    cp ${DEPLOY_DIR}/dark.version ${DEPLOY_DIR}/deployed.version
 fi
 
-rm ~/.deploy/dark.version
+rm ${DEPLOY_DIR}/dark.version
