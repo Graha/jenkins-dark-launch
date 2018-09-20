@@ -1,55 +1,26 @@
 pipeline {
-    agent  { label 'ubuntu-slave' } 
-    environment {
-        Deployment_Versions = "2.0\n1.0"
-        //gettags = ("git ls-remote -t -h git@github.com:RLIndia/cc.git | grep refs/tags | cut -f 3 -d '/'").execute()
-    }
+    agent  { label 'ubuntu-ccdemo' }  
     stages {
         stage ('Initialize') {
             steps {
-                script {
-                    env.Deployment_Name = input(id: 'name', message: 'Select Deployment Stack Name', parameters: [
-                        [$class: 'TextParameterDefinition', defaultValue: 'cc', description: 'Stack Name', name: 'name']
-                    ])
-                }
-                echo "Deployment Stack Name :: ${env.Deployment_Name}"
+                echo "Chosen Stack Name :: ${env.Deployment_Name}"
             }
         }
-        stage ('Pick the Version') {
+        stage ('Release Version') {
             steps {
-                script {
-                    env.Deployment_Version = input(id: 'version', message: 'Select Deployment Version', parameters: [
-                            choice(
-                                name: 'Deployment Version',
-                                choices: env.Deployment_Versions,
-                                description: "Deployment Version...")
-                    ])
-                }
-                echo "Releasing package Version :: ${env.Deployment_Version}"
+                echo "Chosen package Version :: ${env.Deployment_Version}"
             }
         }
         stage ('Deployment Method') {
-            // Blue/Green Deployment
-            // A/B Testing
-            // Canary 
-            // Clean or Fresh Deployment
             steps {
-                script {
-                    env.Deployment_Method = input (id: 'method', message: 'Select Deployment Methods', ok: 'Deploy',
-                        parameters: [
-                            choice(
-                                name: 'Deployment Methods',
-                                choices:"Clean\nBlue/Green\nA/B-Testing\nCanary",
-                                description: "Deployment Methods...")
-                    ])
-                }
                 echo "Releasing on ${env.Deployment_Method} mode."
             }
         }
         stage ('Prepare Release') {
             steps {
                 echo "Preparing Release Procedure..."
-                docker_pull(env.Deployment_Version)
+                //TBR
+                //docker_pull(env.Deployment_Version)
                 sleep 5
             }
         }
@@ -66,7 +37,9 @@ pipeline {
                     // }
                     steps {
                         echo "Releasing on Application Cluster"
-                        sh "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        //TBR
+                        //sh "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        echo "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                     }
                     post {
                         always {
@@ -107,17 +80,46 @@ pipeline {
             steps {
                 echo "Cleanup in progress..."
                 script{
-                    if (env.Deployment_Method != 'Clean') {
+                    //Clean\nBlue/Green\nA/B-Testing\nCanary
+                    if (env.Deployment_Method == 'Blue/Green') {
                         script {
-                            env.Cleanup = input (id: 'cleanup', message: 'Select Cleanup Methods', ok: 'cleanup',
+                            env.Cleanup = input (id: 'cleanup', message: 'Release or Rollback?', ok: 'Do',
                                 parameters: [
                                     choice(
-                                        name: 'Cleanup Version',
-                                        choices:"Previous\nNew",
-                                        description: "Cleanup Version...")
+                                        name: 'Release or Rollback Version',
+                                        choices:"Rollback\nRelease",
+                                        description: "Release or Rollback the Version...")
                             ])
                         }
-                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        //TBR
+                        //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                    }else if (env.Deployment_Method == 'Canary') {
+                        script {
+                            env.Cleanup = input (id: 'cleanup', message: 'Addup or Rollback Canary?', ok: 'Do',
+                                parameters: [
+                                    choice(
+                                        name: 'Addup or Rollback Canary',
+                                        choices:"Rollback\nAddup",
+                                        description: "Addup or Rollback the Canary...")
+                            ])
+                        }
+                        //TBR
+                        //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                    } else if (env.Deployment_Method == 'A/B-Testing') { 
+                        script {
+                            env.Cleanup = input (id: 'cleanup', message: 'Cleanup A or B?', ok: 'Do',
+                                parameters: [
+                                    choice(
+                                        name: 'Cleanup A or B Version',
+                                        choices:"A\nB",
+                                        description: "Cleanup A or B Version...")
+                            ])
+                        }
+                        //TBR
+                        //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"                    
                     } else {
                         echo "Cleanup process skipped..."
                     }
@@ -133,7 +135,7 @@ def docker_pull(version) {
     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
         //def img = docker.image("relevancelab/cc:${version}")
         //img.pull()
-        sh "docker pull graha/go-web:${version}"
+        sh "docker pull relevancelab/cc:${version}"
     }
 }
 
