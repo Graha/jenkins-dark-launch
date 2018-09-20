@@ -39,8 +39,8 @@ pipeline {
                     steps {
                         echo "Releasing on Application Cluster"
                         //TBR
-                        //sh "bash deploy.sh ${env.Application} ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
-                        echo "bash deploy.sh ${env.Application} ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        sh "bash deploy.sh ${env.Application} ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
+                        //echo "bash deploy.sh ${env.Application} ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                     }
                     post {
                         always {
@@ -92,26 +92,9 @@ pipeline {
                                         description: "Release or Rollback the Version...")
                             ])
                         }
-                        parallel {
-                            stage('Finalizing Application Cluster') {
-                                steps {
-                                    echo "Finalizing Application Cluster"
-                                    //TBR
-                                    //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
-                                    echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
-                                }
-                            }
-                            stage('Finalizing Configuration') {
-                                steps {
-                                    echo "No configuration updates available to do..."
-                                }
-                            }
-                            stage('Finalizing Data Store') {
-                                steps {
-                                    echo "No Data Migration available to do..."
-                                }
-                            }
-                        }
+                        //TBR
+                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        //echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                     }else if (env.Deployment_Method == 'Canary') {
                         script {
                             env.Cleanup = input (id: 'cleanup', message: 'Addup or Rollback Canary?', ok: 'Do',
@@ -122,26 +105,9 @@ pipeline {
                                         description: "Addup or Rollback the Canary...")
                             ])
                         }
-                        parallel {
-                            stage('Finalizing Application Cluster') {
-                                steps {
-                                    echo "Finalizing Application Cluster"
-                                    //TBR
-                                    //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
-                                    echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
-                                }
-                            }
-                            stage('Finalizing Configuration') {
-                                steps {
-                                    echo "No configuration updates available to do..."
-                                }
-                            }
-                            stage('Finalizing Data Store') {
-                                steps {
-                                    echo "No Data Migration available to do..."
-                                }
-                            }
-                        }
+                        //TBR
+                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        //echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
                     } else if (env.Deployment_Method == 'A/B-Testing') { 
                         script {
                             env.Cleanup = input (id: 'cleanup', message: 'Cleanup A or B?', ok: 'Do',
@@ -152,26 +118,9 @@ pipeline {
                                         description: "Cleanup A or B Version...")
                             ])
                         }
-                        parallel {
-                            stage('Finalizing Application Cluster') {
-                                steps {
-                                    echo "Finalizing Application Cluster"
-                                    //TBR
-                                    //sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
-                                    echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
-                                }
-                            }
-                            stage('Finalizing Configuration') {
-                                steps {
-                                    echo "No configuration updates available to do..."
-                                }
-                            }
-                            stage('Finalizing Data Store') {
-                                steps {
-                                    echo "No Data Migration available to do..."
-                                }
-                            }
-                        }
+                        //TBR
+                        sh "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"
+                        //echo "bash clean.sh ${env.Cleanup} ${env.Deployment_Name}"                    
                     } else {
                         echo "Cleanup process skipped..."
                     }
