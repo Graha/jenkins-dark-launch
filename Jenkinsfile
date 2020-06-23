@@ -133,9 +133,7 @@ pipeline {
 
 def docker_pull(version) {
     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-        //def img = docker.image("relevancelab/cc:${version}")
-        //img.pull()
-        sh "docker pull relevancelab/cc:${version}"
+        sh "docker pull cc:${version}"
     }
 }
 
@@ -150,8 +148,6 @@ def notify(status, version, environment) {
       body: """<p>Deployment of 'CC:v${version} on ${host}-${os} (${environment}), ${status}'</p>
         <p>Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>"</p>""",
       mimeType: 'text/html',
-      //to: "rlc.support@relevancelab.com"
-      to: "giragadurai.vallirajan@relevancelab.com"
-      //recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+      to: "satheesh@polysign.io"
     )
 }
