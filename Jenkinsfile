@@ -24,22 +24,11 @@ pipeline {
                 sleep 5
             }
         }
-        // stage ('Prepare Chef') {
-        //     steps {
-        //         echo "Preparing Chef Procedure..."
-        //     }
-        // }
         stage ('Release') {
             parallel {
                 stage('Releasing On Application Cluster') {
-                    // agent {
-                    //     label "frontend"
-                    // }
                     steps {
                         echo "Releasing on Application Cluster"
-                        //TBR
-                        //sh "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
-                        echo "bash deploy.sh ${env.Deployment_Version} ${env.Deployment_Method} ${env.Deployment_Name}"
                     }
                     post {
                         always {
@@ -48,24 +37,15 @@ pipeline {
                     }
                 }
                 stage('Updating Configuration') {
-                    // agent {
-                    //     label "database"
-                    // }
-                    steps {
-                         echo "No configuration updates available to do..."
-                    }
                     post {
                         always {
                             echo "Verified Configuration Updates (if any)"
                         }
                     }
                 }
-                stage('Migrating Data Store') {
-                    // agent {
-                    //     label "database"
-                    // }
+                stage('Saving the Artifacts') {
                     steps {
-                         echo "No Data Migration available to do..."
+                         echo "No Artifacts available"
                     }
                     post {
                         always {
@@ -133,9 +113,7 @@ pipeline {
 
 def docker_pull(version) {
     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-        //def img = docker.image("relevancelab/cc:${version}")
-        //img.pull()
-        sh "docker pull relevancelab/cc:${version}"
+        sh "docker pull cc:${version}"
     }
 }
 
@@ -150,8 +128,6 @@ def notify(status, version, environment) {
       body: """<p>Deployment of 'CC:v${version} on ${host}-${os} (${environment}), ${status}'</p>
         <p>Check console output at "<a href="${env.BUILD_URL}">${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>"</p>""",
       mimeType: 'text/html',
-      //to: "rlc.support@relevancelab.com"
-      to: "giragadurai.vallirajan@relevancelab.com"
-      //recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+      to: "satheesh@polysign.io"
     )
 }
