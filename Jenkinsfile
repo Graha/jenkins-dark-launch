@@ -1,5 +1,5 @@
 pipeline {
-    agent  { label 'ubuntu-ccdemo' }  
+    agent  { any }  
     stages {
         stage ('Initialize') {
             steps {
